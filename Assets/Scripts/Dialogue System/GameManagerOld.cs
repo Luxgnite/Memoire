@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class GameManagerOld : MonoBehaviour
 {
-    public static GameManager _instance = null;
+    public static GameManagerOld _instance = null;
 
     public Camera camera;
     public GameObject player;

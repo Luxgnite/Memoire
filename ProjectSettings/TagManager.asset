@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Fire
   - Ground
+  - Thought
   layers:
   - Default
   - TransparentFX
@@ -14,6 +15,7 @@ TagManager:
   - Water
   - UI
   - Ground
+  - UI Thoughts
   - 
   - 
   - 

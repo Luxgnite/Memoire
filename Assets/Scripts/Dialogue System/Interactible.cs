@@ -4,29 +4,29 @@ using UnityEngine;
 
 public class Interactible : MonoBehaviour
 {
-    public Dialogue dialogue;
+    public DialogueData dialogue;
     public string texteAide;
     public bool fenetre = false;
 
     private Message instanceTexteAide;
     private void OnMouseDown()
     {
-        if(instanceTexteAide != null)
+        if (instanceTexteAide != null)
             DestroyImmediate(instanceTexteAide.gameObject);
 
-        if (fenetre && !GameManager._instance.dialogue)
+        if (fenetre && !GameManagerOld._instance.dialogue)
         {
-            GameManager._instance.ChangeScene("Contemplation");
+            //GameManagerOld._instance.ChangeScene("Contemplation");
         }
         else
         {
-            DialogueManager._instance.ChargerDialogue(dialogue, this.gameObject);
+            DialogueManager._instance.ChargerDialogue(dialogue, gameObject);
         }
     }
 
     private void OnMouseEnter()
     {
-        if(DialogueManager._instance.dialogueActif == null)
+        if (DialogueManager._instance.dialogueActif == null)
         {
             Debug.Log("On enter");
             instanceTexteAide = Instantiate(DialogueManager._instance.messagePrefab, new Vector3(0, 0, -1000), Quaternion.identity);
@@ -36,16 +36,16 @@ public class Interactible : MonoBehaviour
             instanceTexteAide.displayText = "<i>" + texteAide + "</i>";
 
             if (fenetre)
-                instanceTexteAide.target = GameManager._instance.player;
+                instanceTexteAide.target = GameManagerOld._instance.player;
             else
-                instanceTexteAide.target = this.gameObject;
+                instanceTexteAide.target = gameObject;
             instanceTexteAide.timeToDie = 0f;
         }
     }
 
     private void OnMouseExit()
     {
-        if(instanceTexteAide != null)
+        if (instanceTexteAide != null)
         {
             instanceTexteAide.timeToDie = 1f;
             instanceTexteAide.SetAutoDestruction();

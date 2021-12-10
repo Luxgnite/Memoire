@@ -14,8 +14,8 @@ public class DialogueManager : MonoBehaviour
     public int typeSpeed;
 
     private GameObject pnjActuel;
-    private Queue<DialoguePhrase> phrases;
- 
+    private Queue<string> phrases;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -24,7 +24,7 @@ public class DialogueManager : MonoBehaviour
             _instance = this;
         else if (_instance != this)
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
             return;
         }
         DontDestroyOnLoad(gameObject);
@@ -32,16 +32,16 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
-        phrases = new Queue<DialoguePhrase>();
+        phrases = new Queue<string>();
     }
 
-    public void ChargerDialogue(Dialogue dialogue, GameObject pnj)
+    public void ChargerDialogue(DialogueData dialogue, GameObject pnj)
     {
         phrases.Clear();
-        GameManager._instance.dialogue = true;
+        GameManagerOld._instance.dialogue = true;
 
         pnjActuel = pnj;
-        foreach(DialoguePhrase phrase in dialogue.phrases)
+        foreach (string phrase in dialogue.dialogueBlocks)
         {
             phrases.Enqueue(phrase);
         }
@@ -51,26 +51,26 @@ public class DialogueManager : MonoBehaviour
 
     public void AfficherProchainePhrase()
     {
-        if(phrases.Count != 0)
+        if (phrases.Count != 0)
         {
             DetruirePhrasePrecedente();
 
-            DialoguePhrase phrase = phrases.Dequeue();
+            string phrase = phrases.Dequeue();
 
             dialogueActif = Instantiate(messagePrefab, new Vector3(0, 0, -1000), Quaternion.identity);
             dialogueActif.gameObject.transform.SetParent(messageCanvas.transform, false);
 
-            dialogueActif.displayText = phrase.texte;
-            
-            if(phrase.emetteurValue == DialoguePhrase.Emetteur.JOUEUR)
-                dialogueActif.target = GameManager._instance.player;
+            dialogueActif.displayText = phrase;
+
+            /*if (phrase.emetteurValue == DialoguePhrase.Emetteur.JOUEUR)
+                dialogueActif.target = GameManagerOld._instance.player;
             else if (phrase.emetteurValue == DialoguePhrase.Emetteur.PNJ)
-                dialogueActif.target = pnjActuel;
+                dialogueActif.target = pnjActuel;*/
             dialogueActif.timeToDie = 0f;
         }
         else
         {
-            GameManager._instance.dialogue = false;
+            GameManagerOld._instance.dialogue = false;
         }
     }
 
