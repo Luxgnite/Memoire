@@ -7,7 +7,7 @@ using TMPro;
 
 public class Message : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField] public Vector3 offset = new Vector3(0,0,0);
+    [SerializeField] public Vector3 offset = new Vector3(0, 0, 0);
     public GameObject target;
     public float timeToDie = 5f;
     public string displayText = "...";
@@ -30,7 +30,7 @@ public class Message : MonoBehaviour, IPointerClickHandler
     //Update is called once per frame
     void FixedUpdate()
     {
-        if(typeWrite)
+        if (typeWrite)
         {
             //On récupère l'ancienne valeur du curseur
             float oldTextIndex = textIndex;
@@ -80,7 +80,7 @@ public class Message : MonoBehaviour, IPointerClickHandler
         {
             text.text = displayText;
         }
-        
+
         Vector3 pos = Camera.main.WorldToScreenPoint(target.transform.position + offset + new Vector3(0, spriteTarget.bounds.extents.y, 0));
         if (transform.position != pos)
             transform.position = pos;
@@ -90,7 +90,7 @@ public class Message : MonoBehaviour, IPointerClickHandler
     {
         Debug.Log("Destroy Message");
         //NotificationManager.instance.notifications.Find(
-        DestroyImmediate(this.gameObject);
+        DestroyImmediate(gameObject);
     }
 
     public void SetAutoDestruction()
@@ -120,7 +120,7 @@ public class Message : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        if(eventData.button == PointerEventData.InputButton.Left)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
             DialogueManager._instance.AfficherProchainePhrase();
         }
