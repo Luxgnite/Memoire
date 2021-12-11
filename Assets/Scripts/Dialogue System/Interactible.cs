@@ -14,7 +14,7 @@ public class Interactible : MonoBehaviour
         if (instanceTexteAide != null)
             DestroyImmediate(instanceTexteAide.gameObject);
 
-        if (fenetre && !GameManagerOld._instance.dialogue)
+        if (fenetre /*&& !GameManagerOld._instance.dialogue*/)
         {
             //GameManagerOld._instance.ChangeScene("Contemplation");
         }
@@ -36,9 +36,9 @@ public class Interactible : MonoBehaviour
             instanceTexteAide.displayText = "<i>" + texteAide + "</i>";
 
             if (fenetre)
-                instanceTexteAide.target = GameManagerOld._instance.player;
+            {/*instanceTexteAide.target = GameManagerOld._instance.player;*/}
             else
-                instanceTexteAide.target = gameObject;
+            { instanceTexteAide.target = gameObject; }
             instanceTexteAide.timeToDie = 0f;
         }
     }

@@ -38,7 +38,7 @@ public class DialogueManager : MonoBehaviour
     public void ChargerDialogue(DialogueData dialogue, GameObject pnj)
     {
         phrases.Clear();
-        GameManagerOld._instance.dialogue = true;
+        //GameManagerOld._instance.dialogue = true;
 
         pnjActuel = pnj;
         foreach (string phrase in dialogue.dialogueBlocks)
@@ -70,7 +70,7 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
-            GameManagerOld._instance.dialogue = false;
+            //GameManagerOld._instance.dialogue = false;
         }
     }
 
