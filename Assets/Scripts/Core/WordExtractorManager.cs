@@ -20,6 +20,11 @@ public class WordExtractorManager : MonoBehaviour
     public GameObject lineNodePrefab;
     public GameObject nodeFocus;
     public GameObject lineCreated;
+    public WordList wordList;
+
+    [Header("DA WAY")]
+    public Word StartWord;
+    public Word EndWord;
     #endregion
 
     #region Private Fields
@@ -86,7 +91,7 @@ public class WordExtractorManager : MonoBehaviour
             }
         }
 
-        if(thoughtFocus != null)
+        if(thoughtFocus != null && thoughtFocus.GetComponent<Word>().state == WordState.BASIC)
         {
             if (Mouse.current.leftButton.isPressed)
             {
@@ -104,12 +109,14 @@ public class WordExtractorManager : MonoBehaviour
             nodeFocus.GetComponentInParent<Word>().resetLine();
             if (Mouse.current.leftButton.isPressed)
             {
-                if (this.lineCreated == null)
+                if (this.lineCreated == null && nodeFocus.GetComponentInParent<Word>().state != WordState.END)
                 {
                     this.lineCreated = Instantiate(lineNodePrefab, this.transform);
                 }
-
-                lineCreated.GetComponent<LineRenderer>().SetPositions(new Vector3[] { nodeFocus.transform.position, Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) });
+                else
+                {
+                    lineCreated.GetComponent<LineRenderer>().SetPositions(new Vector3[] { nodeFocus.transform.position, Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) });
+                }
             }
             else
             {
@@ -126,13 +133,21 @@ public class WordExtractorManager : MonoBehaviour
                 foreach (RaycastResult result in results)
                 {
                     Image node = result.gameObject.GetComponent<Image>();
-                    if(node != null && node != nodeFocus && node.CompareTag("ThoughtNode"))
+                    if(lineCreated != null && node != null && node != nodeFocus && node.CompareTag("ThoughtNode"))
                     {
                         Word originWord = nodeFocus.gameObject.GetComponentInParent<Word>();
                         Word destinationWord = node.gameObject.GetComponentInParent<Word>();
-                        originWord.linkLine = lineCreated;
-                        originWord.linkedWord = destinationWord;
-                        lineCreated = null;
+
+                        if(wordList.IsSameTheme(originWord.text, destinationWord.text) && !IsLooping(originWord, destinationWord))
+                        {
+                            originWord.linkLine = lineCreated;
+                            originWord.linkedWord = destinationWord;
+                            lineCreated = null;
+                            if (DoIWin())
+                            {
+                                Debug.Log("You win sucker !");
+                            }
+                        }  
                     }
                     else
                     {
@@ -143,6 +158,40 @@ public class WordExtractorManager : MonoBehaviour
             }
         }
         
+    }
+
+    public bool IsLooping(Word originWord, Word destinationWord)
+    {
+        Word currentWord = destinationWord;
+        int count = 10;
+        while(currentWord.linkedWord != null && count <= 10)
+        {
+            currentWord = currentWord.linkedWord;
+            count--;
+        }
+
+        if (currentWord == originWord)
+        {
+            return true;
+        }
+
+        return false;
+    }
+    public bool DoIWin()
+    {
+        Word currentWord = StartWord;
+        int count = 10;
+        while (currentWord.linkedWord != null && currentWord.state != WordState.END && count <= 10)
+        {
+            currentWord = currentWord.linkedWord;
+            count--;
+        }
+
+        if(currentWord.state == WordState.END)
+        {
+            return true;
+        }
+        return false;
     }
 
     #region Word Management

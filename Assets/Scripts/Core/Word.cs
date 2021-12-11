@@ -2,12 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WordState
+{
+    BASIC,
+    START,
+    END
+}
 public class Word : MonoBehaviour
 {
     public string text;
     public GameObject node;
     public Word linkedWord;
     public GameObject linkLine;
+    public WordState state = WordState.BASIC;
 
     public Word(string text)
     {
