@@ -81,7 +81,8 @@ public class WordExtractorManager : MonoBehaviour
             if (Mouse.current.leftButton.isPressed)
             {
                 Vector2 mousePos = new Vector2((Mouse.current.position.ReadValue().x/ Screen.width) * 1920 , (Mouse.current.position.ReadValue().y / Screen.height) * 1080);
-                mousePos = new Vector2(Mathf.Min(Mathf.Max(mousePos.x, 0), 1850), Mathf.Min(Mathf.Max(mousePos.y, 0), 950));
+                //Viewport "Margins" 
+                mousePos = new Vector2(Mathf.Min(Mathf.Max(mousePos.x, 100), 1800), Mathf.Min(Mathf.Max(mousePos.y, 100), 900));
                 thoughtFocus.GetComponent<RectTransform>().anchoredPosition = mousePos;
             }
             else
@@ -95,7 +96,7 @@ public class WordExtractorManager : MonoBehaviour
 
     #region Word Management
     /// <summary>
-    /// Generate word on pointer
+    /// Generate "UI word" effect on pointer
     /// </summary>
     /// <param name="word">Word to display</param>
     private void GenerateWord(string word)
@@ -134,7 +135,8 @@ public class WordExtractorManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-            
+        
+        //For each word existing in the list, instantiate a Thought prefab and place its position depending of the property
         foreach(Word word in words)
         {
             GameObject gj = Instantiate(thoughtPrefab, this.transform);
