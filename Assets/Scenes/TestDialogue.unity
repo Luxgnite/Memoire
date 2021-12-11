@@ -590,6 +590,9 @@ MonoBehaviour:
   listText: {fileID: 657273229}
   thoughtPrefab: {fileID: 5104693287711624291, guid: 9a417dcc55da8324b88d5a5bbbf6442d, type: 3}
   thoughtFocus: {fileID: 0}
+  lineNodePrefab: {fileID: 678228995135212097, guid: b0f6b76f2de8aa146b7609bfc4ca5e53, type: 3}
+  nodeFocus: {fileID: 0}
+  lineCreated: {fileID: 0}
 --- !u!225 &712297139
 CanvasGroup:
   m_ObjectHideFlags: 0

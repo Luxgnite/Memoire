@@ -17,6 +17,9 @@ public class WordExtractorManager : MonoBehaviour
     public TextMeshProUGUI listText;
     public GameObject thoughtPrefab;
     public GameObject thoughtFocus;
+    public GameObject lineNodePrefab;
+    public GameObject nodeFocus;
+    public GameObject lineCreated;
     #endregion
 
     #region Private Fields
@@ -60,11 +63,12 @@ public class WordExtractorManager : MonoBehaviour
             foreach(RaycastResult result in results)
             {
                 text = result.gameObject.GetComponent<TextMeshProUGUI>();
+                Image node = result.gameObject.GetComponent<Image>();
                 if (text != null)
                 {
                     if (text.gameObject.CompareTag("Thought"))
                     {
-                        thoughtFocus = text.gameObject;
+                        this.thoughtFocus = text.gameObject;
                     }
                     else if (TMP_TextUtilities.FindIntersectingWord(text, Mouse.current.position.ReadValue(), camera) != -1)
                     {
@@ -72,6 +76,12 @@ public class WordExtractorManager : MonoBehaviour
                         SaveWord(text.textInfo.wordInfo[index].GetWord());
                     }
                     break;
+                }else if(node != null)
+                {
+                    if (node.gameObject.CompareTag("ThoughtNode"))
+                    {
+                        this.nodeFocus = node.gameObject;
+                    }
                 }
             }
         }
@@ -87,8 +97,49 @@ public class WordExtractorManager : MonoBehaviour
             }
             else
             {
-                words.Find(word => word.text == thoughtFocus.name).position = thoughtFocus.GetComponent<RectTransform>().anchoredPosition;
                 thoughtFocus = null;
+            }
+        }else if(nodeFocus != null)
+        {
+            nodeFocus.GetComponentInParent<Word>().resetLine();
+            if (Mouse.current.leftButton.isPressed)
+            {
+                if (this.lineCreated == null)
+                {
+                    this.lineCreated = Instantiate(lineNodePrefab, this.transform);
+                }
+
+                lineCreated.GetComponent<LineRenderer>().SetPositions(new Vector3[] { nodeFocus.transform.position, Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) });
+            }
+            else
+            {
+                //Set up the new Pointer Event
+                m_PointerEventData = new PointerEventData(m_EventSystem);
+                //Set the Pointer Event Position to that of the mouse position
+                m_PointerEventData.position = Mouse.current.position.ReadValue();
+
+                //Create a list of Raycast Results
+                List<RaycastResult> results = new List<RaycastResult>();
+
+                //Raycast using the Graphics Raycaster and mouse click position
+                canvasThoughts.GetComponent<GraphicRaycaster>().Raycast(m_PointerEventData, results);
+                foreach (RaycastResult result in results)
+                {
+                    Image node = result.gameObject.GetComponent<Image>();
+                    if(node != null && node != nodeFocus && node.CompareTag("ThoughtNode"))
+                    {
+                        Word originWord = nodeFocus.gameObject.GetComponentInParent<Word>();
+                        Word destinationWord = node.gameObject.GetComponentInParent<Word>();
+                        originWord.linkLine = lineCreated;
+                        originWord.linkedWord = destinationWord;
+                        lineCreated = null;
+                    }
+                    else
+                    {
+                        Destroy(this.lineCreated);
+                    }
+                }
+                nodeFocus = null;
             }
         }
         
@@ -113,7 +164,12 @@ public class WordExtractorManager : MonoBehaviour
         if (!words.Exists(thoughtWord => thoughtWord.text == word))
         {
             Debug.Log("Thought saved.");
-            words.Add(new Word(word, new Vector2(Random.Range(100, 1800), Random.Range(100, 900))));
+            GameObject gj = Instantiate(thoughtPrefab, this.transform);
+            gj.name = word;
+            gj.GetComponent<TextMeshProUGUI>().text = word;
+            gj.GetComponent<RectTransform>().anchoredPosition = new Vector2(Random.Range(100, 1800), Random.Range(100, 900));
+            Word componentWord = gj.GetComponent<Word>();
+            componentWord.text = word;
         }
         else
             return;
@@ -123,35 +179,8 @@ public class WordExtractorManager : MonoBehaviour
     #region UI Thoughts Management
     bool isShown = false;
 
-    /// <summary>
-    /// Display the differents words on the UI
-    /// </summary>
-    void DisplayWords()
-    {
-        string displayText = "";
-
-        //Destroy all child from Thoughts Menu
-        foreach(Transform child in this.transform)
-        {
-            Destroy(child.gameObject);
-        }
-        
-        //For each word existing in the list, instantiate a Thought prefab and place its position depending of the property
-        foreach(Word word in words)
-        {
-            GameObject gj = Instantiate(thoughtPrefab, this.transform);
-            gj.name = word.text;
-            gj.GetComponent<RectTransform>().anchoredPosition = word.position;
-            gj.GetComponent<TextMeshProUGUI>().text = word.text;
-            //displayText += entry.Key + "\n";
-        }
-
-        //listText.text = displayText;
-    }
-
     void Display(bool show)
     {
-        DisplayWords();
         Sequence s = DOTween.Sequence();
         s.AppendInterval(.25f);
         s.Append(canvasGroup.DOFade(show ? 1 : 0, .2f));

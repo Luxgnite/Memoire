@@ -2,16 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Word
+public class Word : MonoBehaviour
 {
     public string text;
-    public Vector2 position;
     public GameObject node;
     public Word linkedWord;
+    public GameObject linkLine;
 
-    public Word(string text, Vector2 position)
+    public Word(string text)
     {
         this.text = text;
-        this.position = position;
+    }
+
+    public void Update()
+    {
+       if(linkLine != null && linkedWord != null)
+        {
+            linkLine.GetComponent<LineRenderer>().SetPositions(new Vector3[] { this.node.transform.position, linkedWord.node.transform.position });
+        }
+    }
+
+    public void resetLine()
+    {
+        linkedWord = null;
+        Destroy(linkLine);
+        linkLine = null;
     }
 }
