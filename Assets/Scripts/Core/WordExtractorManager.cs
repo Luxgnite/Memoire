@@ -23,14 +23,14 @@ public class WordExtractorManager : MonoBehaviour
     PointerEventData m_PointerEventData;
     EventSystem m_EventSystem;
     // Words list
-    Dictionary<string, Vector2> words;
+    List<Word> words;
     #endregion
 
     private void Awake()
     {
         text = null;
         camera = Camera.main;
-        words = new Dictionary<string, Vector2>();
+        words = new List<Word>();
         //Singleton ?
 
     }
@@ -86,7 +86,7 @@ public class WordExtractorManager : MonoBehaviour
             }
             else
             {
-                words[thoughtFocus.name] = thoughtFocus.GetComponent<RectTransform>().anchoredPosition;
+                words.Find(word => word.text == thoughtFocus.name).position = thoughtFocus.GetComponent<RectTransform>().anchoredPosition;
                 thoughtFocus = null;
             }
         }
@@ -109,10 +109,10 @@ public class WordExtractorManager : MonoBehaviour
     /// <param name="word"></param>
     private void SaveWord(string word)
     {
-        if (!words.ContainsKey(word))
+        if (!words.Exists(thoughtWord => thoughtWord.text == word))
         {
             Debug.Log("Thought saved.");
-            words.Add(word, new Vector3(Random.Range(100, 1800), Random.Range(100, 900), 0));
+            words.Add(new Word(word, new Vector2(Random.Range(100, 1800), Random.Range(100, 900))));
         }
         else
             return;
@@ -135,12 +135,12 @@ public class WordExtractorManager : MonoBehaviour
             Destroy(child.gameObject);
         }
             
-        foreach(KeyValuePair<string, Vector2> entry in words)
+        foreach(Word word in words)
         {
             GameObject gj = Instantiate(thoughtPrefab, this.transform);
-            gj.name = entry.Key;
-            gj.GetComponent<RectTransform>().anchoredPosition = entry.Value;
-            gj.GetComponent<TextMeshProUGUI>().text = entry.Key;
+            gj.name = word.text;
+            gj.GetComponent<RectTransform>().anchoredPosition = word.position;
+            gj.GetComponent<TextMeshProUGUI>().text = word.text;
             //displayText += entry.Key + "\n";
         }
 
