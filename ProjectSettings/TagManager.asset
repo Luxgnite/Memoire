@@ -7,6 +7,7 @@ TagManager:
   - Fire
   - Ground
   - Thought
+  - ThoughtNode
   layers:
   - Default
   - TransparentFX
