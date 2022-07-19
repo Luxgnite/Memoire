@@ -191,10 +191,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Tell me, where do I go ?
-
-
-    Tell me, where do I take us ?'
+  m_text: je moi autonomie collectif peux
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -379,7 +376,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 135239959418136655, guid: 9a417dcc55da8324b88d5a5bbbf6442d, type: 3}
       propertyPath: text
-      value: Big BANG
+      value: "Libert\xE9"
       objectReference: {fileID: 0}
     - target: {fileID: 135239959418136655, guid: 9a417dcc55da8324b88d5a5bbbf6442d, type: 3}
       propertyPath: state
@@ -475,11 +472,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5104693287711624301, guid: 9a417dcc55da8324b88d5a5bbbf6442d, type: 3}
       propertyPath: m_text
-      value: Big BANG
+      value: "Libert\xE9"
       objectReference: {fileID: 0}
     - target: {fileID: 5104693287711624301, guid: 9a417dcc55da8324b88d5a5bbbf6442d, type: 3}
       propertyPath: m_fontSize
-      value: 39.7
+      value: 44.75
       objectReference: {fileID: 0}
     - target: {fileID: 5104693287711624301, guid: 9a417dcc55da8324b88d5a5bbbf6442d, type: 3}
       propertyPath: m_fontColor.b
@@ -1066,7 +1063,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 135239959418136655, guid: 9a417dcc55da8324b88d5a5bbbf6442d, type: 3}
       propertyPath: text
-      value: LA FIN DU MONDE
+      value: "\xC9galit\xE9"
       objectReference: {fileID: 0}
     - target: {fileID: 135239959418136655, guid: 9a417dcc55da8324b88d5a5bbbf6442d, type: 3}
       propertyPath: state
@@ -1162,11 +1159,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5104693287711624301, guid: 9a417dcc55da8324b88d5a5bbbf6442d, type: 3}
       propertyPath: m_text
-      value: LA FIN DU MONDE
+      value: "\xC9galit\xE9"
       objectReference: {fileID: 0}
     - target: {fileID: 5104693287711624301, guid: 9a417dcc55da8324b88d5a5bbbf6442d, type: 3}
       propertyPath: m_fontSize
-      value: 22.05
+      value: 44.75
       objectReference: {fileID: 0}
     - target: {fileID: 5104693287711624301, guid: 9a417dcc55da8324b88d5a5bbbf6442d, type: 3}
       propertyPath: m_fontColor.b

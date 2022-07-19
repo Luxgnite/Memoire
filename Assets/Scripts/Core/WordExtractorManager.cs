@@ -145,7 +145,7 @@ public class WordExtractorManager : MonoBehaviour
                             lineCreated = null;
                             if (DoIWin())
                             {
-                                Debug.Log("You win sucker !");
+                                Debug.Log("Eureka !");
                             }
                         }  
                     }
