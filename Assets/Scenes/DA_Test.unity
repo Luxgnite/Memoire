@@ -260,7 +260,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6636641344931126226, guid: 439704d0085208c468fd68801bcff462, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.00000023841858
+      value: 1.0000002
       objectReference: {fileID: 0}
     - target: {fileID: 6636641344931126226, guid: 439704d0085208c468fd68801bcff462, type: 3}
       propertyPath: m_LocalPosition.y
@@ -535,7 +535,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 0.5943396, g: 0.43222395, b: 0.17661978, a: 1}
-  m_Intensity: 229.22552
+  m_Intensity: 325.3564
   m_Range: 18.21
   m_SpotAngle: 34.60312
   m_InnerSpotAngle: 20.424349
@@ -593,7 +593,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1678856707}
   m_LocalRotation: {x: 0.0000014454126, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0852836, y: 0.17310563, z: -17.992418}
+  m_LocalPosition: {x: -0.0848635, y: 0.17460717, z: -17.993671}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -613,7 +613,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   positionScrollSpeed: 1
   intensityScrollSpeed: 4
-  intensityBase: 200
+  intensityBase: 300
   positionJumpScale: 0.01
   intensityJumpScale: 50
   fadeInTime: 5
