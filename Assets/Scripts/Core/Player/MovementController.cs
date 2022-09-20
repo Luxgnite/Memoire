@@ -27,6 +27,14 @@ public class MovementController : MonoBehaviour
     private bool facingRight = true;
     private Vector3 velocity = Vector3.zero;
 
+    [Header("Interaction")]
+    public LayerMask interactibleLayer;
+    public string interactibleTag;
+    public float interactibleRange = 5f;
+
+    private bool displayedHelp;
+    private GameObject interactibleGO;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +42,9 @@ public class MovementController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         controls = new Controls();
         controls.Enable();
+
+        InterfaceManager.Instance.startDialogue.AddListener(OnStartDialogue);
+        InterfaceManager.Instance.endDialogue.AddListener(OnEndDialogue);
     }
 
     // Update is called once per frame
@@ -46,21 +57,46 @@ public class MovementController : MonoBehaviour
         
         if(isGrounded) { canJump = true; }
 
-        Move();
+        if(canMove) 
+        { 
+            Move(); 
+            characterAnimator.SetFloat("speed", Mathf.Abs(controls.Player.Movement.ReadValue<float>())); 
+        }
 
 
-        if (controls.Player.Jump.triggered && canJump)
+        if (controls.Player.Jump.triggered && canJump && canMove)
         {
             Jump();
         }
 
         characterAnimator.SetBool("isGrounded", isGrounded);
-        characterAnimator.SetFloat("speed", Mathf.Abs(controls.Player.Movement.ReadValue<float>()));
+        
     }
 
     void Update()
     {
+        interactibleGO = null;
+        foreach (Collider coll in Physics.OverlapSphere(transform.position, interactibleRange, interactibleLayer))
+        {
+            if (coll.transform.tag.Equals(interactibleTag))
+                interactibleGO = coll.gameObject;
+        }
 
+        if (interactibleGO != null && !displayedHelp)
+        {
+            DisplayHelp(true);
+            displayedHelp = true;
+        }
+        else if (interactibleGO == null && displayedHelp)
+        {
+            DisplayHelp(false);
+            displayedHelp = false;
+        }
+
+        if(interactibleGO != null && controls.Player.Interact.triggered)
+        {
+            interactibleGO.GetComponent<DialogueTrigger>().TriggerDialogue();
+        }
     }
 
     private void Jump()
@@ -93,13 +129,32 @@ public class MovementController : MonoBehaviour
         rb.velocity = Vector2.zero;
     }
 
-# region Gizmos
+    void DisplayHelp(bool show)
+    {
+        InterfaceManager.Instance.DisplayHelpInteract(show);
+    }
+
+    void OnStartDialogue()
+    {
+        canMove = false;
+    }
+
+    void OnEndDialogue()
+    {
+        canMove = true;
+    }
+
+    #region Gizmos
     //Draw the Box Overlap as a gizmo to show where it currently is testing. Click the Gizmos button to see this
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         //Draw a cube where the OverlapBox is (positioned where your GameObject is as well as a size)
         Gizmos.DrawWireSphere(groundCheck.position, radiusGroundDetection);
+
+        Gizmos.color = Color.yellow;
+        //Interactible range
+        Gizmos.DrawWireSphere(this.transform.position, interactibleRange);
 
     }
 # endregion

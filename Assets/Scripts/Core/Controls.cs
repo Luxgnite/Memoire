@@ -49,6 +49,22 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""081829c8-7dee-4b8e-b8ae-a93d02202a47"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""DialogueNextSentence"",
+                    ""type"": ""Button"",
+                    ""id"": ""4dea7dd9-4d3e-433d-9735-07e4a742fe9b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -117,6 +133,28 @@ public class @Controls : IInputActionCollection, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6c7cc3ad-90cd-497b-b801-6a4a455716a7"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f39a48da-77ae-486d-9943-db08331a7a58"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DialogueNextSentence"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -129,6 +167,8 @@ public class @Controls : IInputActionCollection, IDisposable
         m_Player_ConfirmInput = m_Player.FindAction("ConfirmInput", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_DialogueNextSentence = m_Player.FindAction("DialogueNextSentence", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -182,6 +222,8 @@ public class @Controls : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_ConfirmInput;
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Jump;
+    private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_DialogueNextSentence;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
@@ -190,6 +232,8 @@ public class @Controls : IInputActionCollection, IDisposable
         public InputAction @ConfirmInput => m_Wrapper.m_Player_ConfirmInput;
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
+        public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @DialogueNextSentence => m_Wrapper.m_Player_DialogueNextSentence;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -211,6 +255,12 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                @Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
+                @DialogueNextSentence.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDialogueNextSentence;
+                @DialogueNextSentence.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDialogueNextSentence;
+                @DialogueNextSentence.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDialogueNextSentence;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -227,6 +277,12 @@ public class @Controls : IInputActionCollection, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
+                @DialogueNextSentence.started += instance.OnDialogueNextSentence;
+                @DialogueNextSentence.performed += instance.OnDialogueNextSentence;
+                @DialogueNextSentence.canceled += instance.OnDialogueNextSentence;
             }
         }
     }
@@ -237,5 +293,7 @@ public class @Controls : IInputActionCollection, IDisposable
         void OnConfirmInput(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
+        void OnDialogueNextSentence(InputAction.CallbackContext context);
     }
 }
