@@ -174,16 +174,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5c0c7c0699be0a42b62b08965376591, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasGroup: {fileID: 0}
+  dialogueUI: {fileID: 0}
   helpDisplay: {fileID: 1356597895}
+  dialogueText: {fileID: 0}
   inDialogue: 0
   UIfocus: 0
+  typeWrite: 1
   startDialogue:
     m_PersistentCalls:
       m_Calls: []
   endDialogue:
     m_PersistentCalls:
       m_Calls: []
+  typeSpeed: 10
 --- !u!225 &2066984
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -3856,7 +3859,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &628713229
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3886,7 +3889,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 628713228}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -3903,7 +3906,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasThoughts: {fileID: 437059586}
-  canvasGroup: {fileID: 0}
+  canvasGroup: {fileID: 628713230}
   camera: {fileID: 0}
   text: {fileID: 0}
   listText: {fileID: 0}

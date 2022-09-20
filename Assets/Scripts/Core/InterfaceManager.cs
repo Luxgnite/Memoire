@@ -22,14 +22,24 @@ public class InterfaceManager : MonoBehaviour
     public TextMeshProUGUI dialogueText;
     public bool inDialogue;
     public bool UIfocus = false;
+    public bool typeWrite = true;
 
+    [HideInInspector]
     public UnityEvent startDialogue;
     public UnityEvent endDialogue;
+
+    [Header("Vitesse de l'effet machine à écrire. Caractère par secondes")]
+    [Range(1, 200)]
+    public int typeSpeed;
 
     private Transform targetHelp;
     private Queue<CanvasGroup> UIWaitingForDisplay;
     private Controls controls;
     private Queue<string> dialogueQueue;
+    private string displayText;
+
+    //Index du "curseur" pour l'effet machine à écrire
+    private float textIndex = 0;
     #endregion
 
     void Awake()
@@ -69,6 +79,8 @@ public class InterfaceManager : MonoBehaviour
         {
             DialogueNextSentence();
         }
+
+
     }
 
     public void DisplayHelpInteract(bool show)
@@ -96,7 +108,7 @@ public class InterfaceManager : MonoBehaviour
             DialogueNextSentence();
             startDialogue?.Invoke();
             HideAllDisplayedUI();
-            s.Join(dialogueUI.GetComponent<RectTransform>().DOAnchorPos(new Vector3(0, -200), .2f * 2).From().SetEase(Ease.OutCubic));
+            s.Join(dialogueUI.GetComponent<RectTransform>().DOAnchorPos(new Vector3(0, -200), .2f).From().SetEase(Ease.OutCubic));
             //s.AppendCallback(() => animatedText.ReadText(currentVillager.dialogue.conversationBlock[0]));
             
             inDialogue = true;
@@ -111,10 +123,68 @@ public class InterfaceManager : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (typeWrite)
+        {
+            //On récupère l'ancienne valeur du curseur
+            float oldTextIndex = textIndex;
+            //On récupère le texte à écrire sous forme de tableau de caractères pour le parcourir
+            char[] lettres = displayText.ToCharArray();
+            //Si il y a encore des lettres à écrire, on enclenche le processus
+            if (textIndex < lettres.Length)
+            {
+                textIndex += Time.deltaTime * typeSpeed;
+                //Si il y a suffisament de temps qui s'est passé, on écrit des lettres
+                int maxIndex = (int)textIndex;
+                if ((int)oldTextIndex != (int)textIndex)
+                {
+                    for (int i = (int)oldTextIndex; i < maxIndex; i++)
+                    {
+                        if (lettres[i] == '<')
+                        {
+
+                            string balise = "";
+
+                            bool baliseFin = false;
+
+                            while (!baliseFin)
+                            {
+                                balise += lettres[i];
+                                if (lettres[i] == '>')
+                                {
+                                    Debug.Log("Fin de balise");
+                                    baliseFin = true;
+                                }
+                                i++;
+                                maxIndex++;
+                            }
+                            dialogueText.text += balise;
+                            textIndex = i;
+                        }
+                        else
+                        {
+                            dialogueText.text += lettres[i];
+                        }
+                    }
+                }
+            }
+
+        }
+        else
+        {
+            dialogueText.text = displayText;
+        }
+    }
+
     private void DialogueNextSentence()
     {
         if (dialogueQueue.Count != 0)
-            dialogueText.text = dialogueQueue.Dequeue();
+        {
+            displayText = dialogueQueue.Dequeue();
+            dialogueText.text = "";
+            textIndex = 0;
+        }
         else
             DisplayDialogue(false);
     }
