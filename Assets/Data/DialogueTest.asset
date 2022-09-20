@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: DialogueTest
   m_EditorClassIdentifier: 
   dialogueBlocks:
-  - Tell me, where do I go ?
-  - Tell me, where do I take us ?
+  - 'je moi autonomie '
+  - collectif peux

@@ -36,7 +36,7 @@ public class InterfaceManager : MonoBehaviour
     private Queue<CanvasGroup> UIWaitingForDisplay;
     private Controls controls;
     private Queue<string> dialogueQueue;
-    private string displayText;
+    private string displayText = "...";
 
     //Index du "curseur" pour l'effet machine à écrire
     private float textIndex = 0;

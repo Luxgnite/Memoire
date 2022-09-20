@@ -48,7 +48,7 @@ public class WordExtractorManager : MonoBehaviour
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
 
@@ -109,13 +109,13 @@ public class WordExtractorManager : MonoBehaviour
             nodeFocus.GetComponentInParent<Word>().resetLine();
             if (Mouse.current.leftButton.isPressed)
             {
-                if (this.lineCreated == null && nodeFocus.GetComponentInParent<Word>().state != WordState.END)
+                if (this.lineCreated == null /*&& nodeFocus.GetComponentInParent<Word>().state != WordState.END*/)
                 {
                     this.lineCreated = Instantiate(lineNodePrefab, this.transform);
                 }
                 else
                 {
-                    lineCreated.GetComponent<LineRenderer>().SetPositions(new Vector3[] { nodeFocus.transform.position, Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()) });
+                    lineCreated.GetComponent<LineRenderer>().SetPositions(new Vector3[] { nodeFocus.transform.position, Camera.main.ScreenToWorldPoint(new Vector3(Mouse.current.position.ReadValue().x, Mouse.current.position.ReadValue().y, Camera.main.nearClipPlane)) });
                 }
             }
             else
@@ -233,6 +233,7 @@ public class WordExtractorManager : MonoBehaviour
         Sequence s = DOTween.Sequence();
         s.AppendInterval(.25f);
         s.Append(canvasGroup.DOFade(show ? 1 : 0, .2f));
+        Camera.main.orthographic = show;
 
         isShown = show;
     }
