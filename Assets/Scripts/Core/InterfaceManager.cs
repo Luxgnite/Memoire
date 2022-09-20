@@ -6,17 +6,20 @@ using DG.Tweening;
 public class InterfaceManager : MonoBehaviour
 {
     #region Private Fields
-    private InterfaceManager _instance;
+    private static InterfaceManager _instance;
     #endregion
 
     #region Public Fields
-    public InterfaceManager Instance
+    public static InterfaceManager Instance
     {
         get { return _instance; }
     }
 
     public CanvasGroup canvasGroup;
+    public CanvasGroup helpDisplay;
     public bool inDialogue;
+
+    private Transform targetHelp;
     #endregion
 
     void Awake()
@@ -39,10 +42,20 @@ public class InterfaceManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(targetHelp != null)
+        {
+            helpDisplay.transform.localPosition = Camera.main.WorldToScreenPoint(new Vector3(targetHelp.position.x, targetHelp.position.y, 2));
+        }
     }
 
-    void Display(bool show)
+    public void DisplayHelpInteract(bool show, Transform pTarget = null)
+    {
+        targetHelp = show ?  pTarget : null;
+        helpDisplay.transform.localPosition = Camera.main.WorldToScreenPoint(new Vector3(pTarget.position.x, pTarget.position.y, 2));
+        helpDisplay.DOFade(show ? 1 : 0, .2f);
+    }
+
+    public void DisplayDialogue(bool show)
     {
         Sequence s = DOTween.Sequence();
         s.AppendInterval(.65f);
@@ -67,7 +80,7 @@ public class InterfaceManager : MonoBehaviour
     {
         if(GUI.Button(new Rect(0, 0, 150, 50), "Toggle Dialogue"))
         {
-            Display(!inDialogue);
+            DisplayDialogue(!inDialogue);
         }
     }
 }
